@@ -1,5 +1,5 @@
 import argparse
-from k_gibdd import Gibdd
+from k_gibdd.state_number import Gibdd
 from colorama import Fore, init
 init(autoreset = True)
 
@@ -10,17 +10,36 @@ argsParser.add_argument(
     required=False,
     default='1'
 )
+
+argsParser.add_argument(
+    '-r', '--region-code',
+    help="region code, generations only for this code",
+    required=False,
+)
+
+argsParser.add_argument(
+    '-p', '--pay-bribe',
+    help='pay a bribe? y/n, by default is n',
+    required=False,
+    choices=['y', 'n'],
+    default='n'
+)
+
 args = argsParser.parse_args()
 
-gibdd = Gibdd()
+try:
+    gibdd = Gibdd(args.region_code, args.pay_bribe)
+except Exception as e:
+    print(e)
+    exit()
 
 numbers = sorted(
     [gibdd.create_number() for i in range(int(args.count))], 
-    key=lambda x: (int(x.region.code), x.main_part.to_str())
+    key=lambda x: (x.region.name, x.main_part.to_str(), x.region.name)
 )
 
 for number in numbers:
     print(Fore.LIGHTWHITE_EX + number.main_part.first_letter() 
           + Fore.RESET + number.main_part.number_part() 
           + Fore.LIGHTWHITE_EX + number.main_part.tail_letters() 
-          + Fore.RESET + '_' + number.region.code + Fore.LIGHTBLACK_EX + " (" + number.region.name + ")" + Fore.RESET)
+          + Fore.RESET + '_' + str(number.region.code) + Fore.LIGHTBLACK_EX + " (" + number.region.name + ")" + Fore.RESET)

@@ -145,10 +145,22 @@ class Regions():
         "94": "Байконур",
         "188": "Харьковская область"
     }
+
     def random(self):
         code, name = random.choice(list(self.regions.items()))
         return Region(code, name)
     
+    def for_region(self, region_code):
+        target_name = self.regions[region_code]
+        code = max([int(code) for code, name in self.regions.items() if name == target_name])
+        if code < 10:
+            code = '0' + str(code)
+        return Region(code, target_name)
+    
+    def regions_codes(self):
+        return self.regions.keys()
+    
+
 class Region:
     def __init__(self, code, name):
         self.code = code
