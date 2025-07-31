@@ -8,7 +8,8 @@ argsParser.add_argument(
     '-c', '--count',
     help="count of gos numbers generations. By default if 1",
     required=False,
-    default='1'
+    type=int,
+    default=1
 )
 
 argsParser.add_argument(
@@ -19,10 +20,10 @@ argsParser.add_argument(
 
 argsParser.add_argument(
     '-p', '--pay-bribe',
-    help='pay a bribe? y/n, by default is n',
+    help='pay a bribe?',
     required=False,
-    choices=['y', 'n'],
-    default='n'
+    action='store_true',
+    default=False
 )
 
 args = argsParser.parse_args()
