@@ -22,25 +22,21 @@ argsParser.add_argument(
     '-p', '--pay-bribe',
     help='pay a bribe?',
     required=False,
-    action='store_true',
-    default=False
+    action='store_true'
 )
 
 args = argsParser.parse_args()
 
 try:
-    gibdd = Gibdd(args.region_code, args.pay_bribe)
+    gibdd = Gibdd(args.region_code)
 except Exception as e:
     print(e)
     exit()
 
 numbers = sorted(
-    [gibdd.create_number() for i in range(int(args.count))], 
+    [gibdd.create_number(args.pay_bribe) for i in range(int(args.count))], 
     key=lambda x: (x.region.name, x.main_part.to_str(), x.region.name)
 )
 
 for number in numbers:
-    print(Fore.LIGHTWHITE_EX + number.main_part.first_letter() 
-          + Fore.RESET + number.main_part.number_part() 
-          + Fore.LIGHTWHITE_EX + number.main_part.tail_letters() 
-          + Fore.RESET + '_' + str(number.region.code) + Fore.LIGHTBLACK_EX + " (" + number.region.name + ")" + Fore.RESET)
+    print(gibdd._is_valid(number))
