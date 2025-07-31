@@ -1,9 +1,7 @@
 from k_gibdd.region import Regions
 import exrex
 import random
-from colorama import Fore, init
-init(autoreset = True)
-from enum import Enum, auto
+from enum import Enum
 
 class StateNumberType(Enum):
     SUPER_COOL = 1
@@ -43,18 +41,12 @@ class Gibdd:
     def __init__(self, code = None):
         self.regions = Regions()
         self.code = code
-        if self.code == None:
-            pass
-        elif self.code not in self.regions.regions_codes():
+        if self.code != None and self.code not in self.regions.regions_codes():
             raise Exception(f'Регион {self.code} не найден.')
 
     def create_number(self, bribe):
         
-        if not bribe:
-            letters = self._random_letters()
-            digits = self._random_digits()
-
-        else:
+        if bribe:
             letters = random.choice([
             random.choice(self._cool_letters()),
             self._random_letters()
@@ -63,12 +55,14 @@ class Gibdd:
                 random.choice(self._cool_digits()),
                 self._random_digits()
             ])
+        else:
+            letters = self._random_letters()
+            digits = self._random_digits()
 
         main_part = StateNumberMainPart(letters, digits)
 
         if self.code is not None:
             region = self.regions.for_region(self.code)
-
         else:
             region = self.regions.random()
 
@@ -90,16 +84,18 @@ class Gibdd:
         cool_digits = []
 
         for i in range(0,10):
+
             cool_digits.append([i, 0, i])
             cool_digits.append([0, i, 0])
             cool_digits.append([0, 0, i])
             cool_digits.append([i, 0, 0])
             cool_digits.append([i, i, i])
+
             if i <= 7:
-                cool_digits.append([i, i+1, i+2])
-                
+                cool_digits.append([i, i + 1, i + 2])
             if i >= 2:
-                cool_digits.append([i-2, i-1, i])
+                cool_digits.append([i - 2, i - 1, i])
+
         return cool_digits
     
     def _cool_letters(self):
@@ -129,12 +125,9 @@ class Gibdd:
 
         if digits in self._cool_digits() and letters in self._cool_letters():
             return StateNumberType.SUPER_COOL
-        
         elif digits in self._cool_digits():
             return StateNumberType.COOL_DIGITS
-        
         elif letters in self._cool_letters():
             return StateNumberType.COOL_LETTERS
-        
         else:
             return StateNumberType.REGULAR
