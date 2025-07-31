@@ -3,6 +3,13 @@ import exrex
 import random
 from colorama import Fore, init
 init(autoreset = True)
+from enum import Enum, auto
+
+class StateNumberType(Enum):
+    SUPER_COOL = 1
+    COOL_DIGITS = 2
+    COOL_LETTERS = 3
+    REGULAR = 4
 
 class StateNumberMainPart:
     def __init__(self, letters, digits):
@@ -42,17 +49,16 @@ class Gibdd:
             raise Exception(f'Регион {self.code} не найден.')
 
     def create_number(self, bribe):
-        self.bribe = bribe
         
-        if not self.bribe:
+        if not bribe:
             letters = self._random_letters()
             digits = self._random_digits()
+
         else:
             letters = random.choice([
             random.choice(self._cool_letters()),
             self._random_letters()
-        ])
-        
+            ])
             digits = random.choice([
                 random.choice(self._cool_digits()),
                 self._random_digits()
@@ -62,6 +68,7 @@ class Gibdd:
 
         if self.code is not None:
             region = self.regions.for_region(self.code)
+
         else:
             region = self.regions.random()
 
@@ -81,72 +88,53 @@ class Gibdd:
     
     def _cool_digits(self):
         cool_digits = []
+
         for i in range(0,10):
             cool_digits.append([i, 0, i])
             cool_digits.append([0, i, 0])
             cool_digits.append([0, 0, i])
             cool_digits.append([i, 0, 0])
+            cool_digits.append([i, i, i])
             if i <= 7:
                 cool_digits.append([i, i+1, i+2])
+                
+            if i >= 2:
+                cool_digits.append([i-2, i-1, i])
         return cool_digits
     
     def _cool_letters(self):
-        return [
-        ['А', 'А', 'А'],
+        cool_letters = [
         ['А', 'М', 'Р'],
         ['Е', 'К', 'Х'],
         ['Х', 'К', 'Х'],
         ['О', 'О', 'О'],
-        ['С', 'С', 'С'],
-        ['М', 'М', 'М'],
         ['Р', 'М', 'Р'],
         ['У', 'М', 'Р'],
         ['В', 'О', 'О'],
-        ['Т', 'Т', 'Т'],
-        ['К', 'К', 'К'],
         ['А', 'О', 'О'],
         ['С', 'А', 'С'],
         ['М', 'О', 'С'],
-        ['Х', 'Х', 'Х'],
         ['А', 'К', 'Р'],
         ['Е', 'Р', 'Е'],
         ['А', 'Н', 'А'],
-        ['У', 'У', 'У']
     ]
+        for l in 'АВЕКМНОРСТУХ':
+            cool_letters.append([l, l, l])
+        return cool_letters
     
+    def number_type(self, number):
 
-    def _is_valid(self, number):
         digits = [int(d) for d in number.main_part.number_part()]
         letters = list(number.main_part.first_letter() + number.main_part.tail_letters())
+
         if digits in self._cool_digits() and letters in self._cool_letters():
-            return (
-                Fore.LIGHTGREEN_EX + number.main_part.first_letter()
-                + number.main_part.number_part()
-                + number.main_part.tail_letters()
-                + '_' + str(number.region.code)
-                + Fore.LIGHTBLACK_EX + " (" + number.region.name + ")" + Fore.RESET
-            )
-        if digits in self._cool_digits():
-            return (
-                Fore.LIGHTWHITE_EX + number.main_part.first_letter()
-                + Fore.RED + number.main_part.number_part() + Fore.LIGHTWHITE_EX
-                + number.main_part.tail_letters() + Fore.RESET
-                + '_' + str(number.region.code)
-                + Fore.LIGHTBLACK_EX + " (" + number.region.name + ")" + Fore.RESET
-            )
+            return StateNumberType.SUPER_COOL
+        
+        elif digits in self._cool_digits():
+            return StateNumberType.COOL_DIGITS
+        
         elif letters in self._cool_letters():
-            return (
-                Fore.RED + number.main_part.first_letter() + Fore.LIGHTWHITE_EX
-                + number.main_part.number_part()
-                + Fore.RED + number.main_part.tail_letters() + Fore.RESET
-                + '_' + str(number.region.code)
-                + Fore.LIGHTBLACK_EX + " (" + number.region.name + ")" + Fore.RESET
-            )
+            return StateNumberType.COOL_LETTERS
+        
         else:
-            return (
-                Fore.LIGHTWHITE_EX + number.main_part.first_letter() 
-                + Fore.RESET + number.main_part.number_part() 
-                + Fore.LIGHTWHITE_EX + number.main_part.tail_letters() 
-                + Fore.RESET + '_' + str(number.region.code) 
-                + Fore.LIGHTBLACK_EX + " (" + number.region.name + ")" + Fore.RESET
-            )
+            return StateNumberType.REGULAR
