@@ -10,7 +10,7 @@ def colored_output(number):
             Back.GREEN + Fore.BLACK + number.main_part.first_letter()
             + number.main_part.number_part()
             + number.main_part.tail_letters()
-            + '_' + str(number.region.code) + Back.RESET
+            + '_' + number.region.code + Back.RESET
             + Fore.LIGHTBLACK_EX + " (" + number.region.name + ")" + Fore.RESET
         )
 
@@ -19,7 +19,7 @@ def colored_output(number):
             Fore.LIGHTWHITE_EX + number.main_part.first_letter()
             + Fore.LIGHTGREEN_EX + number.main_part.number_part() + Fore.LIGHTWHITE_EX
             + number.main_part.tail_letters() + Fore.RESET
-            + '_' + str(number.region.code)
+            + '_' + number.region.code
             + Fore.LIGHTBLACK_EX + " (" + number.region.name + ")" + Fore.RESET
         )
 
@@ -28,7 +28,7 @@ def colored_output(number):
             Fore.LIGHTGREEN_EX + number.main_part.first_letter() + Fore.LIGHTWHITE_EX
             + number.main_part.number_part()
             + Fore.LIGHTGREEN_EX + number.main_part.tail_letters() + Fore.RESET
-            + '_' + str(number.region.code)
+            + '_' + number.region.code
             + Fore.LIGHTBLACK_EX + " (" + number.region.name + ")" + Fore.RESET
         )
     else:
@@ -36,7 +36,7 @@ def colored_output(number):
             Fore.LIGHTWHITE_EX + number.main_part.first_letter() 
             + Fore.RESET + number.main_part.number_part() 
             + Fore.LIGHTWHITE_EX + number.main_part.tail_letters() 
-            + Fore.RESET + '_' + str(number.region.code)
+            + Fore.RESET + '_' + number.region.code
             + Fore.LIGHTBLACK_EX + " (" + number.region.name + ")" + Fore.RESET
         )
 
@@ -53,6 +53,7 @@ argsParser.add_argument(
     '-r', '--region-code',
     help="region code, generations only for this code",
     required=False,
+    type=str
 )
 
 argsParser.add_argument(
