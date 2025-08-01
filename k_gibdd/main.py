@@ -72,16 +72,20 @@ argsParser.add_argument(
 args = argsParser.parse_args()
 
 if args.number_check:
-    if re.match(r'^[АВЕКМНОРСТУХ]{1}\d{3}[АВЕКМНОРСТУХ]{2}_\d{2,3}$', args.number_check):
-        try:
-            gibdd = Gibdd(args.number_check[7:])
-        except Exception as e:
-            print(e)
-            exit()
+    
+    try:
+        gibdd = Gibdd(args.number_check[7:])
+    except Exception as e:
+        print(e)
+        exit()
 
-        print(f'Ваш номер корректен - {args.number_check}')
+    if gibdd.is_number_valid(args.number_check):
+        print('Ваш номер корректен - ', end='')
+        table = str.maketrans('ABEKMNOPCTYX', 'АВЕКМНОРСТУХ')
+        colored_output(gibdd.user_number(args.number_check.upper().translate(table)))
     else:
-        print(f'Ваш номер ({args.number_check}) некорректен. Попробуйте формат "A123BC_45"')
+        print(f'Ваш номер ({Fore.RED}{args.number_check.upper()}{Fore.RESET}) некорректен. Попробуйте формат "A123BC_45"')
+        
 else:
     try:
         gibdd = Gibdd(args.region_code)
