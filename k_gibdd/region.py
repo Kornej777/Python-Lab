@@ -152,9 +152,9 @@ class Regions():
     
     def for_region(self, region_code):
         target_name = self.regions[region_code]
-        code = max([int(code) for code, name in self.regions.items() if name == target_name])
-        if code < 10:
-            code = '0' + str(code)
+        code = max([code for code, name in self.regions.items() if name == target_name])
+        if int(code) < 10:
+            code = '0' + code
         return Region(code, target_name)
     
     def regions_codes(self):
