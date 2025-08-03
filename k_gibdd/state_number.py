@@ -70,11 +70,12 @@ class Gibdd:
         return StateNumber(main_part, region)
     
     def is_number_valid(self, number):
-        if re.match(r'^[АВЕКМНОРСТУХABEKMNOPCTYX]{1}\d{3}[АВЕКМНОРСТУХABEKMNOPCTYX]{2}_\d{2,3}$', number.upper()):
-            return True
+        return re.match(r'^[АВЕКМНОРСТУХABEKMNOPCTYX]{1}\d{3}[АВЕКМНОРСТУХABEKMNOPCTYX]{2}_\d{2,3}$', number.upper())
     def user_number(self, number):
-        letters = [number[0], number[4], number[5]]
+        letters = number[0] + number[4] + number[5]
         digits = [number[1], number[2], number[3]]
+        table = str.maketrans('ABEKMNOPCTYX', 'АВЕКМНОРСТУХ')
+        letters = list(letters.translate(table))
         main_part = StateNumberMainPart(letters, digits)
         region = self.regions.for_region(number[7:])
         return StateNumber(main_part, region)

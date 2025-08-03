@@ -81,11 +81,10 @@ if args.number_check:
 
     if gibdd.is_number_valid(args.number_check):
         print('Ваш номер корректен - ', end='')
-        table = str.maketrans('ABEKMNOPCTYX', 'АВЕКМНОРСТУХ')
-        colored_output(gibdd.user_number(args.number_check.upper().translate(table)))
+        colored_output(gibdd.user_number(args.number_check.upper()))
     else:
         print(f'Ваш номер ({Fore.RED}{args.number_check.upper()}{Fore.RESET}) некорректен. Попробуйте формат "A123BC_45"')
-        
+
 else:
     try:
         gibdd = Gibdd(args.region_code)
