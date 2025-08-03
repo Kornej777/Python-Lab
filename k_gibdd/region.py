@@ -2,14 +2,15 @@ import random
 from k_gibdd.load_info import LoadRegions
 
 class Regions():
-    def __init__(self):
-        self.load = LoadRegions('https://www.sibtyre.ru/useful/3/')
-        try:
-            self.regions = self.load.loaded_dict()
-            if self.regions:
-                raise Exception(f'Загрузить данные регионов из интернета не получлось. Используем встроенный словарь...')
-        except Exception:
-            self.regions = {
+
+    def __init__(self, regions_dict):
+        self.regions = regions_dict
+
+    def from_internet(link = 'https://www.sibtyre.ru/useful/3/'):
+        load = LoadRegions(link)
+        region_dict = load.loaded_regions()
+        if not region_dict:
+            region_dict = {
             "01": "Республика Адыгея (Адыгея)",
             "02": "Республика Башкортостан",
             "102": "Республика Башкортостан",
@@ -152,7 +153,8 @@ class Regions():
             "94": "Байконур",
             "188": "Харьковская область"
         }
-
+        return Regions(region_dict)
+    
     def random(self):
         code, name = random.choice(list(self.regions.items()))
         return Region(code, name)

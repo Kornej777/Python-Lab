@@ -8,44 +8,49 @@ class LoadRegions:
         self.region_map = {}
 
     def _load(self):
-        response = requests.get(self.url)
-        soup = BeautifulSoup(response.text, "lxml")
-
-        target_header = soup.find(
-            lambda tag: tag.name in ["h1"] 
-            and "Автомобильные коды регионов России" in tag.text
-        )
         
-        if not target_header:
-            print("Заголовок не найден")
-            return {}
+        try:
+            response = requests.get(self.url)
+            soup = BeautifulSoup(response.text, "lxml")
 
-        table = target_header.find_next("table")
-        
-        if not table:
-            print("Таблица не найдена")
-            return {}
+            target_header = soup.find(
+                lambda tag: tag.name in ["h1"] 
+                and "Автомобильные коды регионов России" in tag.text
+            )
+            
+            if not target_header:
+                print("Заголовок не найден")
+                return {}
 
-        rows = table.find_all("tr")[1:]
+            table = target_header.find_next("table")
+            
+            if not table:
+                print("Таблица не найдена")
+                return {}
 
-        for row in rows:
-            cells = row.find_all("td")
-            if len(cells) >= 2:
-                codes_str = cells[0].get_text(strip=True)
-                region = cells[1].get_text(strip=True)
-                
-                codes = []
-                for separator in [",", "/", " "]:
-                    if separator in codes_str:
-                        codes_str = codes_str.replace(separator, "|") 
-                
-                codes_split = codes_str.split("|")
-                
-                for code in codes_split:
-                    code_clean = code.strip()
-                    if code_clean:
-                        self.region_map[code_clean] = region
+            rows = table.find_all("tr")[1:]
 
-    def loaded_dict(self):
+            for row in rows:
+                cells = row.find_all("td")
+                if len(cells) >= 2:
+                    codes_str = cells[0].get_text(strip=True)
+                    region = cells[1].get_text(strip=True)
+                    
+                    codes = []
+                    for separator in [",", "/", " "]:
+                        if separator in codes_str:
+                            codes_str = codes_str.replace(separator, "|") 
+                    
+                    codes_split = codes_str.split("|")
+                    
+                    for code in codes_split:
+                        code_clean = code.strip()
+                        if code_clean:
+                            self.region_map[code_clean] = region
+
+        except:
+            self.region_map = {}
+
+    def loaded_regions(self):
         self._load()
         return self.region_map

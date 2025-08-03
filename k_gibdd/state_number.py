@@ -40,7 +40,7 @@ class StateNumber:
 
 class Gibdd:
     def __init__(self, code = None):
-        self.regions = Regions()
+        self.regions = Regions.from_internet()
         self.code = code
         if self.code != None and self.code not in self.regions.regions_codes():
             raise Exception(f'Регион {self.code} не найден.')
@@ -71,6 +71,7 @@ class Gibdd:
     
     def is_number_valid(self, number):
         return re.match(r'^[АВЕКМНОРСТУХABEKMNOPCTYX]{1}\d{3}[АВЕКМНОРСТУХABEKMNOPCTYX]{2}_\d{2,3}$', number.upper())
+    
     def user_number(self, number):
         letters = number[0] + number[4] + number[5]
         digits = [number[1], number[2], number[3]]
