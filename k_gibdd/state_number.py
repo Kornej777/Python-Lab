@@ -69,18 +69,6 @@ class Gibdd:
 
         return StateNumber(main_part, region)
     
-    def is_number_valid(self, number):
-        return re.match(r'^[АВЕКМНОРСТУХABEKMNOPCTYX]{1}\d{3}[АВЕКМНОРСТУХABEKMNOPCTYX]{2}_\d{2,3}$', number.upper())
-    
-    def user_number(self, number):
-        letters = number[0] + number[4] + number[5]
-        digits = [number[1], number[2], number[3]]
-        table = str.maketrans('ABEKMNOPCTYX', 'АВЕКМНОРСТУХ')
-        letters = list(letters.translate(table))
-        main_part = StateNumberMainPart(letters, digits)
-        region = self.regions.for_region(number[7:])
-        return StateNumber(main_part, region)
-
     def _random_digits(self):
         digits = []
         for i in range(3):
@@ -144,3 +132,26 @@ class Gibdd:
             return StateNumberType.COOL_LETTERS
         else:
             return StateNumberType.REGULAR
+        
+class RawStateNumber():
+
+    def __init__(self, number):
+        self.number = number.upper()
+
+    def is_valid(self):
+        return re.match(r'^[АВЕКМНОРСТУХABEKMNOPCTYX]{1}\d{3}[АВЕКМНОРСТУХABEKMNOPCTYX]{2}_\d{2,3}$', self.number)
+    
+    def to_string(self):
+        if self.is_valid():
+            regions = Regions.from_internet()
+            letters = self.number[0] + self.number[4] + self.number[5]
+            digits = [self.number[1], self.number[2], self.number[3]]
+            table = str.maketrans('ABEKMNOPCTYX', 'АВЕКМНОРСТУХ')
+            letters = list(letters.translate(table))
+            main_part = StateNumberMainPart(letters, digits)
+            region = regions.for_region(self.number[7:])
+            return StateNumber(main_part, region)
+        else:
+            raise Exception('Неправильный формат номера')
+
+

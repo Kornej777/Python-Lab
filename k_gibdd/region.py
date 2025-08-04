@@ -8,7 +8,7 @@ class Regions():
 
     def from_internet(link = 'https://www.sibtyre.ru/useful/3/'):
         load = LoadRegions(link)
-        region_dict = load.loaded_regions()
+        region_dict = load.load()
         if not region_dict:
             region_dict = {
             "01": "Республика Адыгея (Адыгея)",

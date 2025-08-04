@@ -1,6 +1,8 @@
 import argparse
 from k_gibdd.state_number import Gibdd
 from k_gibdd.state_number import StateNumberType
+from k_gibdd.state_number import StateNumber
+from k_gibdd.state_number import RawStateNumber
 from colorama import Fore, Back
 import re
 
@@ -79,11 +81,13 @@ if args.number_check:
         print(e)
         exit()
 
-    if gibdd.is_number_valid(args.number_check):
-        print('Ваш номер корректен - ', end='')
-        colored_output(gibdd.user_number(args.number_check.upper()))
-    else:
-        print(f'Ваш номер ({Fore.RED}{args.number_check.upper()}{Fore.RESET}) некорректен. Попробуйте формат "A123BC_45"')
+    raw_number = RawStateNumber(args.number_check)
+
+    try:
+            print('Ваш номер корректен - ', end='')
+            colored_output(raw_number.to_string())
+    except Exception:
+            print(f'Ваш номер ({Fore.RED}{args.number_check.upper()}{Fore.RESET}) некорректен. Попробуйте формат "A123BC_45"')
 
 else:
     try:

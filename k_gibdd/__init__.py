@@ -4,7 +4,7 @@ from k_gibdd.state_number import Gibdd
 from k_gibdd.region import Regions
 from k_gibdd.region import Region
 from k_gibdd.load_info import LoadRegions
-
+from k_gibdd.state_number import RawStateNumber
 
 
 
@@ -14,5 +14,6 @@ __all__ = [
     'Gibdd',
     'Regions',
     'Region',
-    'LoadRegions'
+    'LoadRegions',
+    'RawStateNumber'
 ]

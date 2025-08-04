@@ -9,13 +9,18 @@ def test_state_number():
     ).to_str() == "A342AA_90"
 
 def test_number_check():
-    assert gibdd.is_number_valid('А123АА_77')
+    assert RawStateNumber('А123АА_77').is_valid()
 
 def test_number_check2():
-    assert gibdd.is_number_valid('b123aa_77')
+    assert RawStateNumber('b123aa_77').is_valid()
 
 def test_number_check3():
-    assert gibdd.is_number_valid('y113Аk_777')
+    n ='y113Аk_777'
+    assert RawStateNumber(n).to_string()
+
+
+
+
 
 
 
