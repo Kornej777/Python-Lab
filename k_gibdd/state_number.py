@@ -45,7 +45,7 @@ class Gibdd:
         if self.code != None and self.code not in self.regions.regions_codes():
             raise Exception(f'Регион {self.code} не найден.')
 
-    def create_number(self, bribe):
+    def create_number(self, bribe = False):
         
         if bribe:
             letters = random.choice([

@@ -25,10 +25,12 @@ def test_number_check4():
     assert not RawStateNumber('b123a2a_77').is_valid()
 
 def test_number_check5():
-    n = Gibdd().create_number(False)
+    n = Gibdd().create_number()
     assert n.region.code == Regions.from_internet().actual_region(n.region.code).code
 
-
+def test_number_check6():
+    n = Gibdd('77').create_number()
+    assert n.region.code == Regions.from_internet().actual_region(n.region.code).code
 
 
 
