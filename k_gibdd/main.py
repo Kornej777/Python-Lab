@@ -85,7 +85,7 @@ if args.number_check:
 
     try:
             print('Ваш номер корректен - ', end='')
-            colored_output(raw_number.to_string())
+            colored_output(raw_number.to_number())
     except Exception:
             print(f'Ваш номер ({Fore.RED}{args.number_check.upper()}{Fore.RESET}) некорректен. Попробуйте формат "A123BC_45"')
 

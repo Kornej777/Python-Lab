@@ -159,7 +159,7 @@ class Regions():
         code, name = random.choice(list(self.regions.items()))
         return Region(code, name)
     
-    def for_region(self, region_code):
+    def actual_region(self, region_code):
         target_name = self.regions[region_code]
         code = str(max([int(code) for code, name in self.regions.items() if name == target_name]))
         if int(code) < 10:

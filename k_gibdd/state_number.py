@@ -63,9 +63,9 @@ class Gibdd:
         main_part = StateNumberMainPart(letters, digits)
 
         if self.code is not None:
-            region = self.regions.for_region(self.code)
+            region = self.regions.actual_region(self.code)
         else:
-            region = self.regions.random()
+            region = self.regions.actual_region(self.regions.random().code)
 
         return StateNumber(main_part, region)
     
@@ -141,15 +141,14 @@ class RawStateNumber():
     def is_valid(self):
         return re.match(r'^[АВЕКМНОРСТУХABEKMNOPCTYX]{1}\d{3}[АВЕКМНОРСТУХABEKMNOPCTYX]{2}_\d{2,3}$', self.number)
     
-    def to_string(self):
+    def to_number(self):
         if self.is_valid():
-            regions = Regions.from_internet()
             letters = self.number[0] + self.number[4] + self.number[5]
             digits = [self.number[1], self.number[2], self.number[3]]
             table = str.maketrans('ABEKMNOPCTYX', 'АВЕКМНОРСТУХ')
             letters = list(letters.translate(table))
             main_part = StateNumberMainPart(letters, digits)
-            region = regions.for_region(self.number[7:])
+            region = self.number[7:]
             return StateNumber(main_part, region)
         else:
             raise Exception('Неправильный формат номера')
